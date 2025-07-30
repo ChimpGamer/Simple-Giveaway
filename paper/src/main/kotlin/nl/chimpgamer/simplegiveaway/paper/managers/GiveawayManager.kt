@@ -14,122 +14,121 @@ import org.bukkit.entity.Player
 import kotlin.time.Duration.Companion.seconds
 
 class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
+    companion object {
+        private const val INITIAL_COUNTDOWN = 10
+        private const val COUNTDOWN_SOUND_THRESHOLD = 5
+    }
+
+    val settingsConfig get() = plugin.settingsConfig
+    val messagesConfig get() = plugin.messagesConfig
     var giveaway: Giveaway? = null
 
     fun createGiveaway(creator: Player) {
-        if (plugin.giveawayManager.giveaway != null) {
-            creator.sendRichMessage(plugin.messagesConfig.giveawayAlreadyRunning)
+        if (giveaway != null) {
+            creator.sendRichMessage(messagesConfig.giveawayAlreadyRunning)
             return
         }
 
-        this.giveaway = Giveaway(creator.uniqueId)
+        giveaway = Giveaway(creator.uniqueId)
 
-        creator.sendRichMessage(plugin.messagesConfig.giveawayCreated)
-        plugin.broadcast(plugin.messagesConfig.giveawayCreatedBroadcast.parse())
+        creator.sendRichMessage(messagesConfig.giveawayCreated)
+        plugin.broadcast(messagesConfig.giveawayCreatedBroadcast.parse())
     }
 
     fun joinGiveaway(player: Player) {
-        val giveaway = this.giveaway
-        if (giveaway == null) {
-            player.sendRichMessage(plugin.messagesConfig.giveawayNotFound)
-            return
+        executeWithGiveaway(player) { giveaway ->
+            giveaway.addPlayer(player)
+            player.sendRichMessage(messagesConfig.giveawayJoined)
+            settingsConfig.giveawayJoinSound.play(player)
         }
-
-        giveaway.addPlayer(player)
-        player.sendRichMessage(plugin.messagesConfig.giveawayJoined)
-        plugin.settingsConfig.giveawayJoinSound.play(player)
     }
 
     fun leaveGiveaway(player: Player) {
-        val giveaway = this.giveaway
-        if (giveaway == null) {
-            player.sendRichMessage(plugin.messagesConfig.giveawayNotFound)
-            return
+        executeWithGiveaway(player) { giveaway ->
+            giveaway.removePlayer(player)
+            player.sendRichMessage(messagesConfig.giveawayLeft)
+            settingsConfig.giveawayLeaveSound.play(player)
         }
-
-        giveaway.removePlayer(player)
-        player.sendRichMessage(plugin.messagesConfig.giveawayLeft)
-        plugin.settingsConfig.giveawayLeaveSound.play(player)
     }
 
     fun stopGiveaway(player: Player) {
-        val giveaway = this.giveaway
-        if (giveaway == null) {
-            player.sendRichMessage(plugin.messagesConfig.giveawayNotFound)
-            return
+        executeWithGiveaway(player) { giveaway ->
+            this.giveaway = null
+            player.sendRichMessage(messagesConfig.giveawayStopped)
+            plugin.broadcast(messagesConfig.giveawayStoppedBroadcast.parse())
         }
-
-        this.giveaway = null
-        player.sendRichMessage(plugin.messagesConfig.giveawayStopped)
-        plugin.broadcast(plugin.messagesConfig.giveawayStoppedBroadcast.parse())
     }
 
     suspend fun startGiveaway(player: Player) {
-        val giveaway = this.giveaway
-        if (giveaway == null) {
-            player.sendRichMessage(plugin.messagesConfig.giveawayNotFound)
-            return
-        }
-
-        if (giveaway.players().isEmpty()) {
-            player.sendRichMessage(plugin.messagesConfig.giveawayStartNotEnoughParticipants)
-            return
-        }
-
-        var winnerUUID = giveaway.players().random()
-        var winner = plugin.server.getPlayer(winnerUUID)
-        while (winner == null) {
-            giveaway.removePlayer(winnerUUID)
-            winnerUUID = giveaway.players().random()
-            winner = plugin.server.getPlayer(winnerUUID)
-        }
-
-        plugin.broadcast(plugin.messagesConfig.giveawayStartCountdown.parse(
-            parsed("countdown_number", "10"),
-            Formatter.choice("countdown", 10)
-        ))
-        val giveawayStartCountdownSound = plugin.settingsConfig.giveawayStartCountdownSound
-
-        var i = 10
-        while (i != 0) {
-            delay(1.seconds)
-            if (i <= 5) {
-                plugin.broadcast(plugin.messagesConfig.giveawayStartCountdown.parse(
-                    parsed("countdown_number", i.toString()),
-                    Formatter.choice("countdown", i)
-                ))
-                giveawayStartCountdownSound.play(player)
+        executeWithGiveaway(player) { giveaway ->
+            if (giveaway.players().isEmpty()) {
+                player.sendRichMessage(messagesConfig.giveawayStartNotEnoughParticipants)
+                return
             }
-            i--
+
+            var winnerUUID = giveaway.players().random()
+            var winner = plugin.server.getPlayer(winnerUUID)
+            while (winner == null) {
+                giveaway.removePlayer(winnerUUID)
+                winnerUUID = giveaway.players().random()
+                winner = plugin.server.getPlayer(winnerUUID)
+            }
+
+            plugin.broadcast(
+                messagesConfig.giveawayStartCountdown.parse(
+                    parsed("countdown_number", "$INITIAL_COUNTDOWN"),
+                    Formatter.choice("countdown", INITIAL_COUNTDOWN)
+                )
+            )
+            val giveawayStartCountdownSound = settingsConfig.giveawayStartCountdownSound
+
+            for (i in INITIAL_COUNTDOWN downTo 1) {
+                delay(1.seconds)
+                if (i <= COUNTDOWN_SOUND_THRESHOLD) {
+                    plugin.broadcast(
+                        messagesConfig.giveawayStartCountdown.parse(
+                            parsed("countdown_number", i.toString()),
+                            Formatter.choice("countdown", i)
+                        )
+                    )
+                    giveawayStartCountdownSound.play(plugin.server.onlinePlayers.first())
+                }
+            }
+
+            plugin.broadcast(messagesConfig.giveawayStartWinnerBroadcast.parse(parsed("winner_name", winner.name)))
+            settingsConfig.giveawayStartWinnerAnnouncementSound.play(winner)
+            val firework = settingsConfig.giveawayStartWinnerAnnouncementFirework
+            withContext(plugin.globalRegionDispatcher) {
+                firework.play(winner)
+            }
+            this.giveaway = null
         }
-        delay(1.seconds)
-        plugin.broadcast(plugin.messagesConfig.giveawayStartWinnerBroadcast.parse(parsed("winner_name", winner.name)))
-        plugin.settingsConfig.giveawayStartWinnerAnnouncementSound.play(winner)
-        val firework = plugin.settingsConfig.giveawayStartWinnerAnnouncementFirework
-        withContext(plugin.globalRegionDispatcher) {
-            firework.play(winner)
-        }
-        this.giveaway = null
     }
 
     fun showStats(player: Player) {
-        val giveaway = this.giveaway
-        if (giveaway == null) {
-            player.sendRichMessage(plugin.messagesConfig.giveawayNotFound)
+        executeWithGiveaway(player) { giveaway ->
+            val tagResolver = TagResolver.resolver(
+                mapOf(
+                    "creator_name" to plugin.server.getOfflinePlayer(giveaway.creator).name,
+                    "creator_uuid" to giveaway.creator.toString(),
+                    "participants_count" to giveaway.players().count(),
+                    "online_players_count" to plugin.server.onlinePlayers.count(),
+                    "participants" to giveaway.players().mapNotNull { plugin.server.getPlayer(it)?.name }
+                        .joinToString(),
+                    "online_players" to plugin.server.onlinePlayers.joinToString { it.name },
+                ).toTagResolver(true),
+                Formatter.date("created_at", giveaway.createdDate)
+            )
+            player.sendMessage(messagesConfig.giveawayStats.parse(tagResolver))
+        }
+    }
+
+    private inline fun executeWithGiveaway(player: Player, action: (Giveaway) -> Unit) {
+        val currentGiveaway = giveaway
+        if (currentGiveaway == null) {
+            player.sendRichMessage(messagesConfig.giveawayNotFound)
             return
         }
-
-        val tagResolver = TagResolver.resolver(
-            mapOf(
-                "creator_name" to plugin.server.getOfflinePlayer(giveaway.creator).name,
-                "creator_uuid" to giveaway.creator.toString(),
-                "participants_count" to giveaway.players().count(),
-                "online_players_count" to plugin.server.onlinePlayers.count(),
-                "participants" to giveaway.players().mapNotNull { plugin.server.getPlayer(it)?.name }.joinToString(),
-                "online_players" to plugin.server.onlinePlayers.joinToString { it.name },
-            ).toTagResolver(true),
-            Formatter.date("created_at", giveaway.createdDate)
-        )
-        player.sendMessage(plugin.messagesConfig.giveawayStats.parse(tagResolver))
+        action(currentGiveaway)
     }
 }
