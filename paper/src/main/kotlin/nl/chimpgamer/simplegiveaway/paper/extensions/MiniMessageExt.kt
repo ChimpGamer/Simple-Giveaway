@@ -12,6 +12,7 @@ private val miniMessageTagRegex = Regex("<[!?#]?[a-z0-9_-]*>")
 fun String.parse() = miniMessage().deserialize(this).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
 
 fun String.parse(tagResolver: TagResolver) = miniMessage().deserialize(this, tagResolver).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+fun String.parse(vararg tagResolvers: TagResolver) = parse(TagResolver.resolver(*tagResolvers))
 
 fun String.parse(replacements: Map<String, *>) = parse(replacements.toTagResolver())
 

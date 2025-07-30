@@ -5,6 +5,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.parsed
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import nl.chimpgamer.simplegiveaway.paper.SimpleGiveawayPlugin
 import nl.chimpgamer.simplegiveaway.paper.extensions.parse
@@ -84,10 +85,8 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
         }
 
         plugin.broadcast(plugin.messagesConfig.giveawayStartCountdown.parse(
-            TagResolver.resolver(
-                Placeholder.parsed("countdown_number", "10"),
-                Formatter.choice("countdown", 10)
-            )
+            parsed("countdown_number", "10"),
+            Formatter.choice("countdown", 10)
         ))
         val giveawayStartCountdownSound = plugin.settingsConfig.giveawayStartCountdownSound
 
@@ -96,17 +95,15 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
             delay(1.seconds)
             if (i <= 5) {
                 plugin.broadcast(plugin.messagesConfig.giveawayStartCountdown.parse(
-                    TagResolver.resolver(
-                        Placeholder.parsed("countdown_number", i.toString()),
-                        Formatter.choice("countdown", i)
-                    )
+                    parsed("countdown_number", i.toString()),
+                    Formatter.choice("countdown", i)
                 ))
                 giveawayStartCountdownSound.play(player)
             }
             i--
         }
         delay(1.seconds)
-        plugin.broadcast(plugin.messagesConfig.giveawayStartWinnerBroadcast.parse(mapOf("winner_name" to winner.name)))
+        plugin.broadcast(plugin.messagesConfig.giveawayStartWinnerBroadcast.parse(parsed("winner_name", winner.name)))
         plugin.settingsConfig.giveawayStartWinnerAnnouncementSound.play(winner)
         val firework = plugin.settingsConfig.giveawayStartWinnerAnnouncementFirework
         withContext(plugin.globalRegionDispatcher) {
