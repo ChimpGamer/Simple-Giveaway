@@ -4,11 +4,11 @@ import com.github.shynixn.mccoroutine.folia.globalRegionDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.parsed
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import nl.chimpgamer.simplegiveaway.paper.SimpleGiveawayPlugin
 import nl.chimpgamer.simplegiveaway.paper.extensions.parse
+import nl.chimpgamer.simplegiveaway.paper.extensions.toTagResolver
 import nl.chimpgamer.simplegiveaway.paper.models.Giveaway
 import org.bukkit.entity.Player
 import kotlin.time.Duration.Companion.seconds
@@ -119,11 +119,17 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
             return
         }
 
-        player.sendMessage(plugin.messagesConfig.giveawayStats.parse(mapOf(
-            "participants_count" to giveaway.players().count(),
-            "online_players_count" to plugin.server.onlinePlayers.count(),
-            "participants" to giveaway.players().mapNotNull { plugin.server.getPlayer(it)?.name }.joinToString(),
-            "online_players" to plugin.server.onlinePlayers.joinToString { it.name }
-        )))
+        val tagResolver = TagResolver.resolver(
+            mapOf(
+                "creator_name" to plugin.server.getOfflinePlayer(giveaway.creator).name,
+                "creator_uuid" to giveaway.creator.toString(),
+                "participants_count" to giveaway.players().count(),
+                "online_players_count" to plugin.server.onlinePlayers.count(),
+                "participants" to giveaway.players().mapNotNull { plugin.server.getPlayer(it)?.name }.joinToString(),
+                "online_players" to plugin.server.onlinePlayers.joinToString { it.name },
+            ).toTagResolver(true),
+            Formatter.date("created_at", giveaway.createdDate)
+        )
+        player.sendMessage(plugin.messagesConfig.giveawayStats.parse(tagResolver))
     }
 }
