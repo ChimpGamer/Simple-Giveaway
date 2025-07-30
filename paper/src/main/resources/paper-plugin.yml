@@ -1,0 +1,6 @@
+name: Simple-Giveaway
+version: ${version}
+main: nl.chimpgamer.simplegiveaway.paper.SimpleGiveawayPlugin
+description: Simple Giveaway plugin for Paper.
+api-version: '1.20.4'
+loader: nl.chimpgamer.simplegiveaway.paper.SimpleGiveawayLoader

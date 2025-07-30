@@ -1,0 +1,48 @@
+giveaway:
+  join:
+    sound:
+      enabled: true
+      sound: BLOCK_WOODEN_DOOR_OPEN
+      volume: 1.0
+      pitch: 1.0
+  leave:
+    sound:
+      enabled: true
+      sound: BLOCK_WOODEN_DOOR_CLOSE
+      volume: 1.0
+      pitch: 1.0
+  start:
+    countdown:
+      sound:
+        enabled: true
+        sound: BLOCK_NOTE_BLOCK_BASS
+        volume: 1.0
+        pitch: 1.0
+    winner-announcement:
+      sound:
+        enabled: true
+        sound: ENTITY_LIGHTNING_BOLT_THUNDER
+        volume: 1.0
+        pitch: 1.0
+      firework:
+        enabled: true
+        flicker: false
+        trail: true
+        colors:
+          - ALPHA: 255
+            RED: 255
+            BLUE: 0
+            GREEN: 0
+          - ALPHA: 255
+            RED: 255
+            BLUE: 255
+            GREEN: 0
+        fade-colors:
+          - ALPHA: 255
+            RED: 0
+            BLUE: 128
+            GREEN: 0
+        type: STAR
+
+
+config-version: 1

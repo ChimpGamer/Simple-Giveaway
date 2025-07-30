@@ -1,0 +1,20 @@
+giveaway:
+  already-running: '<red>There is already a ongoing giveaway running!'
+  created: '<green>Giveaway has been created! Players can join using /giveaway join'
+  created-broadcast: '<green>A giveaway has been created! You can join using /giveaway join'
+  not-found: '<red>No running giveaway was found!'
+  joined: '<green>You''ve joined the giveaway!'
+  left: '<green>You''ve left the giveaway!'
+  stopped: '<green>You''ve stopped the giveaway!'
+  stopped-broadcast: '<red>The giveaway has been stopped!'
+  start:
+    not-enough-participants: '<red>There are not enough participants to start the giveaway!'
+    countdown: "<gold>The giveaway will start in <yellow><countdown_number> <countdown:'1#second|1<seconds'></yellow>!"
+    winner:
+      broadcast: '<green>The giveaway has been won by <yellow><winner_name></yellow>!'
+  stats: '<gold>There are <yellow><participants_count></yellow> of <yellow><online_players_count></yellow> players participating in the giveaway!'
+
+commands:
+  no-permission: "<red>I'm sorry, but you do not have permission to perform this command.<br>Please contact the server administrators if you believe that this is a error."
+
+config-version: 1
