@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
@@ -34,7 +35,8 @@ subprojects {
     tasks {
         processResources {
             filesMatching("**/*.yml") {
-                expand("version" to project.version)
+                val buildNumber = System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"
+                expand("version" to project.version, "buildDate" to getDate(), "buildNumber" to buildNumber)
             }
         }
 
@@ -46,6 +48,12 @@ subprojects {
             dependsOn(shadowJar)
         }
     }
+}
+
+fun getDate(): String {
+    val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy hh:mm:ss")
+    val date = Date()
+    return simpleDateFormat.format(date)
 }
 
 /**
