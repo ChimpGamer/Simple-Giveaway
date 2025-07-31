@@ -41,7 +41,13 @@ subprojects {
         }
 
         shadowJar {
-            archiveFileName.set("Simple-Giveaway-${project.name.capitalizeWords()}-v${project.version}.jar")
+            val buildNumber = System.getenv("BUILD_NUMBER")
+            val name = if (buildNumber == null) {
+                "Simple-Giveaway-${project.name.capitalizeWords()}-v${project.version}.jar"
+            } else {
+                "Simple-Giveaway-${project.name.capitalizeWords()}-v${project.version}-b$buildNumber.jar"
+            }
+            archiveFileName.set(name)
         }
 
         build {
