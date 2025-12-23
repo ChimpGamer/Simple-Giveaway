@@ -18,8 +18,8 @@ public class SimpleGiveawayLoader implements PluginLoader {
             add("org.jetbrains.kotlin:kotlin-stdlib:2.2.0");
             add("dev.dejvokep:boosted-yaml:1.3.7");
             add("org.incendo:cloud-core:2.0.0");
-            add("org.incendo:cloud-paper:2.0.0-beta.10");
-            add("org.incendo:cloud-minecraft-extras:2.0.0-beta.10");
+            add("org.incendo:cloud-paper:2.0.0-beta.14");
+            add("org.incendo:cloud-minecraft-extras:2.0.0-beta.14");
             add("org.incendo:cloud-kotlin-coroutines:2.0.0");
             add("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.20.0");
             add("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.20.0");
