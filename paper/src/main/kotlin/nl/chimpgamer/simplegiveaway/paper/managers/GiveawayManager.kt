@@ -23,16 +23,23 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
     val messagesConfig get() = plugin.messagesConfig
     var giveaway: Giveaway? = null
 
-    fun createGiveaway(creator: Player) {
+    fun createGiveaway(creator: Player, prize: String? = null) {
         if (giveaway != null) {
             creator.sendRichMessage(messagesConfig.giveawayAlreadyRunning)
             return
         }
 
-        giveaway = Giveaway(creator.uniqueId)
+        val cleanedPrize = prize?.trim()?.takeIf { it.isNotEmpty() }
+        giveaway = Giveaway(creator.uniqueId, cleanedPrize)
 
-        creator.sendRichMessage(messagesConfig.giveawayCreated)
-        plugin.broadcast(messagesConfig.giveawayCreatedBroadcast.parse())
+        if (cleanedPrize == null) {
+            plugin.broadcast(messagesConfig.giveawayCreatedBroadcast.parse())
+        } else {
+            plugin.broadcast(
+                messagesConfig.giveawayCreatedBroadcastWithPrize
+                    .parse(parsed("prize", cleanedPrize))
+            )
+        }
     }
 
     fun joinGiveaway(player: Player) {
