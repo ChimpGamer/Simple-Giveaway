@@ -33,11 +33,14 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
         giveaway = Giveaway(creator.uniqueId, cleanedPrize)
 
         if (cleanedPrize == null) {
+            creator.sendRichMessage(messagesConfig.giveawayCreated)
             plugin.broadcast(messagesConfig.giveawayCreatedBroadcast.parse())
         } else {
+            val tagResolver = parsed("prize", cleanedPrize)
+            creator.sendMessage(messagesConfig.giveawayCreatedWithPrize.parse(tagResolver))
             plugin.broadcast(
                 messagesConfig.giveawayCreatedBroadcastWithPrize
-                    .parse(parsed("prize", cleanedPrize))
+                    .parse(tagResolver)
             )
         }
     }
