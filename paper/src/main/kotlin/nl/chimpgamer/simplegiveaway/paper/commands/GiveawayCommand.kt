@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.incendo.cloud.CommandManager
 import org.incendo.cloud.parser.standard.StringParser.greedyStringParser
 import org.incendo.cloud.kotlin.coroutines.extension.suspendingHandler
+import kotlin.jvm.optionals.getOrNull
 
 class GiveawayCommand(private val plugin: SimpleGiveawayPlugin) {
 
@@ -19,27 +20,15 @@ class GiveawayCommand(private val plugin: SimpleGiveawayPlugin) {
             .senderType(Player::class.java)
             .literal("create")
             .permission("$basePermission.create")
+            .required("prize", greedyStringParser())
             .handler { context ->
                 val sender = context.sender()
-                plugin.giveawayManager.createGiveaway(sender, null)
+                val prize = context.optional<String>("prize").getOrNull()
+                plugin.giveawayManager.createGiveaway(sender, prize)
             }
         )
 
         commandManager.command(builder
-            .senderType(Player::class.java)
-            .literal("create")
-            .permission("$basePermission.create")
-            .required("prize",
-            greedyStringParser()
-        )
-        .handler { context ->
-            val sender = context.sender()
-            val prize = context.get<String>("prize")
-            plugin.giveawayManager.createGiveaway(sender, prize)
-        }
-    )
-
-commandManager.command(builder
             .senderType(Player::class.java)
             .literal("join")
             .permission("$basePermission.join")
