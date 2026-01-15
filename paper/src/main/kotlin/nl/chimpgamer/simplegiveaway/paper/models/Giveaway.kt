@@ -6,6 +6,7 @@ import java.util.UUID
 
 class Giveaway(
     val creator: UUID,
+    val prize: String? = null,
     private val players: MutableSet<UUID> = HashSet(),
     val createdDate: LocalDateTime = LocalDateTime.now()
 ) {

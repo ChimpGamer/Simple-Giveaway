@@ -23,6 +23,8 @@ class MessagesConfig(plugin: SimpleGiveawayPlugin) {
     val giveawayStartCountdown: String get() = config.getString("giveaway.start.countdown")
     val giveawayStartWinnerBroadcast: String get() = config.getString("giveaway.start.winner.broadcast")
     val giveawayStats: String get() = config.getString("giveaway.stats")
+    val giveawayCreatedWithPrize: String get() = config.getString("giveaway.created-with-prize")
+    val giveawayCreatedBroadcastWithPrize: String get() = config.getString("giveaway.created-broadcast-with-prize")
 
     val commandsNoPermission: String get() = config.getString("commands.no-permission")
 
