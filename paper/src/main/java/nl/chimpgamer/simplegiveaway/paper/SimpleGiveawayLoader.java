@@ -15,7 +15,7 @@ public class SimpleGiveawayLoader implements PluginLoader {
     @Override
     public void classloader(@NotNull PluginClasspathBuilder classpathBuilder) {
         var dependencies = new ArrayList<String>() {{
-            add("org.jetbrains.kotlin:kotlin-stdlib:2.2.0");
+            add("org.jetbrains.kotlin:kotlin-stdlib:2.3.0");
             add("dev.dejvokep:boosted-yaml:1.3.7");
             add("org.incendo:cloud-core:2.0.0");
             add("org.incendo:cloud-paper:2.0.0-beta.14");
