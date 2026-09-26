@@ -50,6 +50,12 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
             giveaway.addPlayer(player)
             player.sendRichMessage(messagesConfig.giveawayJoined)
             settingsConfig.giveawayJoinSound.play(player)
+
+            val placeholders = mapOf(
+                "player_name" to player.name,
+                "participants_count" to giveaway.players().count()
+            )
+            giveaway.creator()?.sendMessage(plugin.messagesConfig.giveawayPlayerJoinActionbar.parse(placeholders))
         }
     }
 
@@ -58,6 +64,11 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
             giveaway.removePlayer(player)
             player.sendRichMessage(messagesConfig.giveawayLeft)
             settingsConfig.giveawayLeaveSound.play(player)
+            val placeholders = mapOf(
+                "player_name" to player.name,
+                "participants_count" to giveaway.players().count()
+            )
+            giveaway.creator()?.sendMessage(plugin.messagesConfig.giveawayPlayerLeaveActionbar.parse(placeholders))
         }
     }
 
@@ -79,7 +90,7 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
             var winnerUUID = giveaway.players().random()
             var winner = plugin.server.getPlayer(winnerUUID)
             while (winner == null) {
-                giveaway.forceRemovePlayer(winnerUUID)
+                giveaway.removePlayer(winnerUUID)
                 winnerUUID = giveaway.players().random()
                 winner = plugin.server.getPlayer(winnerUUID)
             }
