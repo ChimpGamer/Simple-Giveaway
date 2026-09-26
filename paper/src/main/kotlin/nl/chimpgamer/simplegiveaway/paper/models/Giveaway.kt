@@ -1,6 +1,9 @@
 package nl.chimpgamer.simplegiveaway.paper.models
 
 import org.bukkit.entity.Player
+import net.kyori.adventure.text.minimessage.tag.resolver.Formatter
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.parsed
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import java.time.LocalDateTime
 import java.util.UUID
 
