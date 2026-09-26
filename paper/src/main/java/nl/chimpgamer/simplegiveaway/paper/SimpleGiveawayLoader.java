@@ -21,8 +21,8 @@ public class SimpleGiveawayLoader implements PluginLoader {
             add("org.incendo:cloud-paper:2.0.1");
             add("org.incendo:cloud-minecraft-extras:2.0.1");
             add("org.incendo:cloud-kotlin-coroutines:2.1.0");
-            add("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.20.0");
-            add("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.20.0");
+            add("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.23.0");
+            add("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.23.0");
         }};
 
         var mavenLibraryResolver = new MavenLibraryResolver();

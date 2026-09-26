@@ -12,8 +12,8 @@ dependencies {
     compileOnly("org.incendo:cloud-minecraft-extras:2.0.1")
     compileOnly("org.incendo:cloud-kotlin-coroutines:2.1.0")
 
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.20.0")
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.20.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.23.0")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.23.0")
 }
 
 tasks {
