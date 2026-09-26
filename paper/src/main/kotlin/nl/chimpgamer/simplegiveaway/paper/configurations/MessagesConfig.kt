@@ -25,6 +25,8 @@ class MessagesConfig(plugin: SimpleGiveawayPlugin) {
     val giveawayStats: String get() = config.getString("giveaway.stats")
     val giveawayCreatedWithPrize: String get() = config.getString("giveaway.created-with-prize")
     val giveawayCreatedBroadcastWithPrize: String get() = config.getString("giveaway.created-broadcast-with-prize")
+    val giveawayPlayerJoinActionbar: String get() = config.getString("giveaway.notify-creator.player-join.actionbar")
+    val giveawayPlayerLeaveActionbar: String get() = config.getString("giveaway.notify-creator.player-leave.actionbar")
 
     val commandsNoPermission: String get() = config.getString("commands.no-permission")
 
