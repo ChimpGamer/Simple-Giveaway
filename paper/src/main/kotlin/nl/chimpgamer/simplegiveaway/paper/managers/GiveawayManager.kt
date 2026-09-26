@@ -30,7 +30,7 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
         }
 
         val cleanedPrize = prize?.trim()?.takeIf { it.isNotEmpty() }
-        giveaway = Giveaway(creator.uniqueId, cleanedPrize)
+        giveaway = Giveaway(plugin, creator.uniqueId, cleanedPrize)
 
         if (cleanedPrize == null) {
             creator.sendRichMessage(messagesConfig.giveawayCreated)
@@ -79,7 +79,7 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
             var winnerUUID = giveaway.players().random()
             var winner = plugin.server.getPlayer(winnerUUID)
             while (winner == null) {
-                giveaway.removePlayer(winnerUUID)
+                giveaway.forceRemovePlayer(winnerUUID)
                 winnerUUID = giveaway.players().random()
                 winner = plugin.server.getPlayer(winnerUUID)
             }
