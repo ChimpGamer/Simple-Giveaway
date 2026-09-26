@@ -14,11 +14,27 @@ class Giveaway(
     fun addPlayer(player: Player) = addPlayer(player.uniqueId)
     fun addPlayer(playerUUID: UUID) {
         players.add(playerUUID)
+        var joinedPlayer = plugin.server.getPlayer(playerUUID)
+        val tagResolver = Tagresolver.resolver(
+            mapOf(
+                "player_name" to joinedPlayer.name,
+                "participants_count" to this.players().count()
+            )
+        )
+        creator.sendRichMessage(messagesConfig.giveawayPlayerJoinActionbar.parse(tagResolver))
     }
 
     fun removePlayer(player: Player) = removePlayer(player.uniqueId)
     fun removePlayer(playerUUID: UUID) {
         players.remove(playerUUID)
+        var removedPlayer = plugin.server.getPlayer(playerUUID)
+        val tagResolver = Tagresolver.resolver(
+            mapOf(
+                "player_name" to removedPlayer.name,
+                "participants_count" to this.players().count()
+            )
+        )
+        creator.sendRichMessage(messagesConfig.giveawayPlayerLeaveActionbar.parse(tagResolver))
     }
 
     fun players() = players.toSet()

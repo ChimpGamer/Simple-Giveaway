@@ -15,8 +15,10 @@ giveaway:
   stats: '<gold>There are <yellow><participants_count></yellow> of <yellow><online_players_count></yellow> players participating in the giveaway!'
   created-with-prize: '<green>Giveaway has been created! Players can join using /giveaway join<br>The prize is <yellow><prize></yellow>'
   created-broadcast-with-prize: '<green>A giveaway has been created! You can join using /giveaway join<br>The prize is <yellow><prize></yellow>'
+  player-join-actionbar: '<gold><player_name> has joined the giveaway! <yellow>(<participants_count>)</yellow>'
+  player-leave-actionbar: '<gold><player_name> has left the giveaway!</gold> <yellow>(<participants_count>)</yellow>'
 
 commands:
   no-permission: "<red>I'm sorry, but you do not have permission to perform this command.<br>Please contact the server administrators if you believe that this is a error."
 
-config-version: 2
+config-version: 3
