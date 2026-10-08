@@ -43,6 +43,7 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
                     .parse(tagResolver)
             )
         }
+        settingsConfig.giveawayCreateSound.play(creator)
     }
 
     fun joinGiveaway(player: Player) {

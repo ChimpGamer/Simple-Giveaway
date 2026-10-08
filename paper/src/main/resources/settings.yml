@@ -1,4 +1,10 @@
 giveaway:
+  create:
+    sound:
+      enabled: true
+      sound: BLOCK_NOTE_BLOCK_PLING
+      volume: 1.0
+      pitch: 1.0
   join:
     sound:
       enabled: true
@@ -45,4 +51,4 @@ giveaway:
         type: STAR
 
 
-config-version: 1
+config-version: 2
