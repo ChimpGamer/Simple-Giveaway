@@ -13,6 +13,7 @@ import nl.chimpgamer.simplegiveaway.paper.models.ConfigurableSound
 class SettingsConfig(plugin: SimpleGiveawayPlugin) {
     val config: YamlDocument
 
+    val giveawayCreateSound: ConfigurableSound get() = ConfigurableSound.deserialize(config.getSection("giveaway.create.sound").getStringRouteMappedValues(false))
     val giveawayJoinSound: ConfigurableSound get() = ConfigurableSound.deserialize(config.getSection("giveaway.join.sound").getStringRouteMappedValues(false))
     val giveawayLeaveSound: ConfigurableSound get() = ConfigurableSound.deserialize(config.getSection("giveaway.leave.sound").getStringRouteMappedValues(false))
     val giveawayStartCountdownSound: ConfigurableSound get() = ConfigurableSound.deserialize(config.getSection("giveaway.start.countdown.sound").getStringRouteMappedValues(false))
