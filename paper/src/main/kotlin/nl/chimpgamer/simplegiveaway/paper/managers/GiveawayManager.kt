@@ -56,7 +56,7 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
                 "player_name" to player.name,
                 "participants_count" to giveaway.players().count()
             )
-            giveaway.creator()?.sendMessage(plugin.messagesConfig.giveawayPlayerJoinActionbar.parse(placeholders))
+            giveaway.creator()?.sendActionBar(plugin.messagesConfig.giveawayPlayerJoinActionbar.parse(placeholders))
         }
     }
 
@@ -69,7 +69,7 @@ class GiveawayManager(private val plugin: SimpleGiveawayPlugin) {
                 "player_name" to player.name,
                 "participants_count" to giveaway.players().count()
             )
-            giveaway.creator()?.sendMessage(plugin.messagesConfig.giveawayPlayerLeaveActionbar.parse(placeholders))
+            giveaway.creator()?.sendActionBar(plugin.messagesConfig.giveawayPlayerLeaveActionbar.parse(placeholders))
         }
     }
 
